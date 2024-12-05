@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>10-Day Advent Calendar</title>
+  <style>
+    /* General Reset */
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #e0f7ff;
+      color: #003f5c;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    /* Container */
+    .container {
+      text-align: center;
+      max-width: 600px;
+      width: 100%;
+      padding: 20px;
+    }
+
+    /* Title */
+    .title {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #007bbf;
+      margin-bottom: 10px;
+    }
+
+    /* Subtitle */
+    .subtitle {
+      font-size: 1.2rem;
+      color: #005073;
+      margin-bottom: 20px;
+    }
+
+    /* Calendar Grid */
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      margin: auto;
+    }
+
+    /* Day Boxes */
+    .day {
+      background-color: #009fd4;
+      color: white;
+      font-size: 1.5rem;
+      font-weight: bold;
+      height: 80px;
+      line-height: 80px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    /* Hover Effect */
+    .day:hover {
+      background-color: #007bbf;
+      transform: translateY(-5px);
+    }
+
+    /* Clicked State */
+    .day.clicked {
+      background-color: #005073;
+      pointer-events: none;
+      transform: scale(0.95);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">10-Day Advent Calendar</h1>
+    <p class="subtitle">Click a day to reveal a surprise!</p>
+    <div class="calendar">
+      <!-- 10 days of the advent calendar -->
+      <div class="day" onclick="openDay(1)">1</div>
+      <div class="day" onclick="openDay(2)">2</div>
+      <div class="day" onclick="openDay(3)">3</div>
+      <div class="day" onclick="openDay(4)">4</div>
+      <div class="day" onclick="openDay(5)">5</div>
+      <div class="day" onclick="openDay(6)">6</div>
+      <div class="day" onclick="openDay(7)">7</div>
+      <div class="day" onclick="openDay(8)">8</div>
+      <div class="day" onclick="openDay(9)">9</div>
+      <div class="day" onclick="openDay(10)">10</div>
+    </div>
+  </div>
+
+  <script>
+    let openedToday = false; // Tracks if a cell has already been opened today
+
+    function openDay(day) {
+      const currentDate = new Date().toDateString(); // Get today's date
+      const lastOpenedDate = localStorage.getItem('lastOpenedDate'); // Retrieve last opened date from localStorage
+
+      if (lastOpenedDate === currentDate) {
+        // If already opened today, show an error message
+        alert("You can only open one day per day! Come back tomorrow.");
+        return;
+      }
+
+      // Mark this day as opened
+      const dayElement = document.querySelectorAll(".day")[day - 1];
+      if (!dayElement.classList.contains("clicked")) {
+        dayElement.classList.add("clicked");
+        alert(`🎉 Surprise for Day ${day}! 🎉`);
+        localStorage.setItem('lastOpenedDate', currentDate); // Save the last opened date
+      }
+    }
+  </script>
+</body>
+</html>
