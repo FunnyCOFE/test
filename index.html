@@ -97,26 +97,35 @@
   </div>
 
   <script>
-    let openedToday = false; // Tracks if a cell has already been opened today
+    // Function to load previously opened days from localStorage
+    function loadOpenedDays() {
+      const openedDays = JSON.parse(localStorage.getItem('openedDays')) || [];
+      openedDays.forEach(day => {
+        const dayElement = document.querySelectorAll(".day")[day - 1];
+        if (dayElement) dayElement.classList.add("clicked");
+      });
+    }
 
+    // Function to handle opening a day
     function openDay(day) {
-      const currentDate = new Date().toDateString(); // Get today's date
-      const lastOpenedDate = localStorage.getItem('lastOpenedDate'); // Retrieve last opened date from localStorage
+      const openedDays = JSON.parse(localStorage.getItem('openedDays')) || [];
 
-      if (lastOpenedDate === currentDate) {
-        // If already opened today, show an error message
-        alert("You can only open one day per day! Come back tomorrow.");
-        return;
-      }
-
-      // Mark this day as opened
-      const dayElement = document.querySelectorAll(".day")[day - 1];
-      if (!dayElement.classList.contains("clicked")) {
+      if (!openedDays.includes(day)) {
+        // Mark the day as opened
+        const dayElement = document.querySelectorAll(".day")[day - 1];
         dayElement.classList.add("clicked");
         alert(`🎉 Surprise for Day ${day}! 🎉`);
-        localStorage.setItem('lastOpenedDate', currentDate); // Save the last opened date
+
+        // Save the opened day to localStorage
+        openedDays.push(day);
+        localStorage.setItem('openedDays', JSON.stringify(openedDays));
+      } else {
+        alert("This day has already been opened!");
       }
     }
+
+    // Load the opened days on page load
+    document.addEventListener("DOMContentLoaded", loadOpenedDays);
   </script>
 </body>
 </html>
