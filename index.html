@@ -80,7 +80,7 @@
 <body>
   <div class="container">
     <h1 class="title">10-Day Advent Calendar</h1>
-    <p class="subtitle">Click a day to reveal a surprise!</p>
+    <p class="subtitle">Click a day to reveal a surprise! Only one window can be opened per day.</p>
     <div class="calendar">
       <!-- 10 days of the advent calendar -->
       <div class="day" onclick="openDay(1)">1</div>
@@ -97,7 +97,6 @@
   </div>
 
   <script>
-    // Function to load previously opened days from localStorage
     function loadOpenedDays() {
       const openedDays = JSON.parse(localStorage.getItem('openedDays')) || [];
       openedDays.forEach(day => {
@@ -106,9 +105,16 @@
       });
     }
 
-    // Function to handle opening a day
     function openDay(day) {
+      const today = new Date().toDateString(); // Get today's date as a string
+      const lastOpenedDate = localStorage.getItem('lastOpenedDate'); // Get the last opened date
       const openedDays = JSON.parse(localStorage.getItem('openedDays')) || [];
+
+      if (lastOpenedDate === today) {
+        // If the user already opened a window today
+        alert("You can only open one window per day! Come back tomorrow.");
+        return;
+      }
 
       if (!openedDays.includes(day)) {
         // Mark the day as opened
@@ -116,9 +122,10 @@
         dayElement.classList.add("clicked");
         alert(`🎉 Surprise for Day ${day}! 🎉`);
 
-        // Save the opened day to localStorage
+        // Save the opened day and date to localStorage
         openedDays.push(day);
         localStorage.setItem('openedDays', JSON.stringify(openedDays));
+        localStorage.setItem('lastOpenedDate', today);
       } else {
         alert("This day has already been opened!");
       }
